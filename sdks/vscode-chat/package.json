@@ -24,6 +24,16 @@
         "command": "opencode-chat.open",
         "title": "Open Chat",
         "category": "OpenCode"
+      },
+      {
+        "command": "opencode-chat.restartServer",
+        "title": "Restart Server",
+        "category": "OpenCode"
+      },
+      {
+        "command": "opencode-chat.showLogs",
+        "title": "Show Server Logs",
+        "category": "OpenCode"
       }
     ],
     "viewsContainers": {

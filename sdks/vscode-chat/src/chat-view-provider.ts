@@ -1,5 +1,6 @@
 import * as vscode from "vscode"
 import { OpencodeClient, Session } from "./opencode-client"
+import { OpencodeServer } from "./opencode-server"
 
 export class ChatViewProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView
@@ -7,7 +8,8 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
 
   constructor(
     private readonly extensionUri: vscode.Uri,
-    private readonly client: OpencodeClient
+    private readonly client: OpencodeClient,
+    private readonly server?: OpencodeServer
   ) {}
 
   resolveWebviewView(
@@ -47,13 +49,50 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
         case "abort":
           await this.handleAbort()
           break
+        case "restartServer":
+          await this.handleRestartServer()
+          break
+        case "showLogs":
+          this.server?.showOutput()
+          break
       }
     })
 
     this.handleCheckHealth()
   }
 
+  private async handleRestartServer() {
+    if (!this.server) {
+      this.postMessage({ type: "error", message: "服务器管理器不可用" })
+      return
+    }
+
+    this.postMessage({ type: "serverRestarting", data: true })
+
+    try {
+      await this.server.stop()
+      const url = await this.server.start({ port: 4096, timeout: 15000 })
+      this.client.setBaseUrl(url)
+      this.postMessage({ type: "serverRestarting", data: false })
+      await this.handleCheckHealth()
+    } catch (error) {
+      this.postMessage({ type: "serverRestarting", data: false })
+      this.postMessage({ type: "error", message: `重启服务器失败: ${error}` })
+    }
+  }
+
   private async handleCheckHealth() {
+    // If server is managed by us, try to start it if not running
+    if (this.server && !this.server.isRunning) {
+      try {
+        const url = await this.server.start({ port: 4096, timeout: 15000 })
+        this.client.setBaseUrl(url)
+      } catch {
+        this.postMessage({ type: "health", data: null, error: "OpenCode 服务器启动失败" })
+        return
+      }
+    }
+
     try {
       const health = await this.client.health()
       this.postMessage({ type: "health", data: health })
@@ -419,6 +458,8 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
   <div class="header">
     <span class="header-title">OpenCode Chat</span>
     <div class="header-buttons">
+      <button class="btn" id="logsBtn" title="查看日志">📜</button>
+      <button class="btn" id="restartBtn" title="重启服务器">🔄</button>
       <button class="btn" id="sessionsBtn" title="会话列表">📋</button>
       <button class="btn btn-primary" id="newSessionBtn" title="新会话">+ 新建</button>
     </div>
@@ -460,11 +501,14 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     const sessionsPanel = document.getElementById('sessionsPanel');
     const sessionsList = document.getElementById('sessionsList');
     const statusDiv = document.getElementById('status');
+    const restartBtn = document.getElementById('restartBtn');
+    const logsBtn = document.getElementById('logsBtn');
 
     let currentSessionId = null;
     let sessions = [];
     let isTyping = false;
     let hasMessages = false;
+    let isRestarting = false;
 
     // Initialize
     vscode.postMessage({ type: 'checkHealth' });
@@ -474,6 +518,12 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
     sendBtn.addEventListener('click', sendMessage);
     newSessionBtn.addEventListener('click', () => vscode.postMessage({ type: 'newSession' }));
     sessionsBtn.addEventListener('click', toggleSessionsPanel);
+    restartBtn.addEventListener('click', () => {
+      if (!isRestarting) {
+        vscode.postMessage({ type: 'restartServer' });
+      }
+    });
+    logsBtn.addEventListener('click', () => vscode.postMessage({ type: 'showLogs' }));
 
     messageInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && e.ctrlKey) {
@@ -614,6 +664,14 @@ export class ChatViewProvider implements vscode.WebviewViewProvider {
             setTimeout(hideStatus, 3000);
           } else {
             showStatus(message.error || '无法连接到 OpenCode 服务器', 'error');
+          }
+          break;
+
+        case 'serverRestarting':
+          isRestarting = message.data;
+          restartBtn.disabled = isRestarting;
+          if (isRestarting) {
+            showStatus('正在重启服务器...', 'info');
           }
           break;
 

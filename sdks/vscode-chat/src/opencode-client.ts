@@ -41,6 +41,10 @@ export class OpencodeClient {
     }
   }
 
+  setBaseUrl(url: string) {
+    this.baseUrl = url
+  }
+
   setPort(port: number) {
     this.baseUrl = `http://127.0.0.1:${port}`
   }

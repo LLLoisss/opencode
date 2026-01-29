@@ -6,15 +6,16 @@
 
 - 🎯 **侧边栏聊天界面**: 在 VS Code 侧边栏中提供简洁的对话界面
 - 💬 **会话管理**: 支持创建、切换和删除多个对话会话
-- 🔄 **实时通信**: 与本地 OpenCode 服务器实时通信
+- 🔄 **自动启动服务器**: 插件激活时自动启动 OpenCode 服务器，无需手动操作
+- 🔧 **服务器管理**: 支持重启服务器、查看服务器日志
 - 🎨 **主题适配**: 自动适配 VS Code 的明暗主题
 
 ## 先决条件
 
-1. 确保已安装 [OpenCode](https://github.com/anomalyco/opencode)
-2. 启动 OpenCode 服务器：
+1. 确保已安装 [OpenCode](https://github.com/anomalyco/opencode) 命令行工具
    ```bash
-   opencode serve --port 4096
+   # 验证安装
+   opencode --version
    ```
 
 ## 开发
@@ -48,13 +49,28 @@ bun run package
 
 1. 点击侧边栏的 "OpenCode Chat" 图标
 2. 或使用快捷键 `Ctrl+Shift+O` (Mac: `Cmd+Shift+O`)
-3. 在输入框中输入消息，按 `Ctrl+Enter` 或点击发送按钮
+3. 插件会自动启动 OpenCode 服务器
+4. 在输入框中输入消息，按 `Ctrl+Enter` 或点击发送按钮
+
+### 工具栏按钮
+
+- 📜 **查看日志**: 打开 OpenCode 服务器的输出日志
+- 🔄 **重启服务器**: 重新启动 OpenCode 服务器
+- 📋 **会话列表**: 查看和切换历史会话
+- **+ 新建**: 创建新的对话会话
+
+### 命令
+
+- `OpenCode: Open Chat` - 打开聊天面板
+- `OpenCode: Restart Server` - 重启服务器
+- `OpenCode: Show Server Logs` - 显示服务器日志
 
 ## 架构
 
 ```
 src/
-├── extension.ts          # 插件入口
+├── extension.ts          # 插件入口，管理生命周期
+├── opencode-server.ts    # OpenCode 服务器进程管理
 ├── opencode-client.ts    # OpenCode API 客户端
 └── chat-view-provider.ts # Webview 视图提供者
 ```
