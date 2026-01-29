@@ -1,0 +1,71 @@
+{
+  "name": "opencode-chat",
+  "displayName": "OpenCode Chat",
+  "description": "A VS Code extension that integrates OpenCode chat functionality with a webview interface",
+  "version": "0.0.1",
+  "publisher": "opencode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anomalyco/opencode"
+  },
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "opencode-chat.open",
+        "title": "Open Chat",
+        "category": "OpenCode"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "opencode-chat",
+          "title": "OpenCode Chat",
+          "icon": "images/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "opencode-chat": [
+        {
+          "type": "webview",
+          "id": "opencode-chat.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "opencode-chat.open",
+        "key": "ctrl+shift+o",
+        "mac": "cmd+shift+o"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "bun run package",
+    "compile": "bun run check-types && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "bun run check-types && node esbuild.js --production",
+    "check-types": "tsc --noEmit",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.94.0",
+    "@types/node": "20.x",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
