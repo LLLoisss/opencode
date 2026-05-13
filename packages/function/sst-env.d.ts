@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /* deno-fmt-ignore-file */
+/* biome-ignore-all lint: auto-generated */
 
 import "sst"
 declare module "sst" {
@@ -33,6 +34,10 @@ declare module "sst" {
     "Console": {
       "type": "sst.cloudflare.SolidStart"
       "url": string
+    }
+    "DISCORD_INCIDENT_WEBHOOK_URL": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
     "DISCORD_SUPPORT_BOT_TOKEN": {
       "type": "sst.sst.Secret"
@@ -86,11 +91,27 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "HoneycombWebhookSecret": {
+      "type": "random.index/randomPassword.RandomPassword"
+      "value": string
+    }
     "R2AccessKey": {
       "type": "sst.sst.Secret"
       "value": string
     }
     "R2SecretKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "SALESFORCE_CLIENT_ID": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "SALESFORCE_CLIENT_SECRET": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "SALESFORCE_INSTANCE_URL": {
       "type": "sst.sst.Secret"
       "value": string
     }
@@ -118,10 +139,6 @@ declare module "sst" {
       "type": "sst.cloudflare.StaticSite"
       "url": string
     }
-    "ZEN_BLACK_LIMITS": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
     "ZEN_BLACK_PRICE": {
       "plan100": string
       "plan20": string
@@ -129,7 +146,62 @@ declare module "sst" {
       "product": string
       "type": "sst.sst.Linkable"
     }
+    "ZEN_LIMITS": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_LITE_PRICE": {
+      "firstMonth100Coupon": string
+      "firstMonth50Coupon": string
+      "price": string
+      "priceInr": number
+      "product": string
+      "sixMonths100Coupon": string
+      "threeMonths100Coupon": string
+      "twelveMonths100Coupon": string
+      "type": "sst.sst.Linkable"
+    }
     "ZEN_MODELS1": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS10": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS11": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS12": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS13": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS14": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS15": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS16": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS17": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS18": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS19": {
       "type": "sst.sst.Secret"
       "value": string
     }
@@ -137,7 +209,51 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "ZEN_MODELS20": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS21": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS22": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS23": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS24": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS25": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS26": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS27": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS28": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS29": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "ZEN_MODELS3": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ZEN_MODELS30": {
       "type": "sst.sst.Secret"
       "value": string
     }
@@ -161,6 +277,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "ZEN_MODELS9": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "ZEN_SESSION_SECRET": {
       "type": "sst.sst.Secret"
       "value": string
@@ -178,6 +298,7 @@ declare module "sst" {
     "EnterpriseStorage": cloudflare.R2Bucket
     "GatewayKv": cloudflare.KVNamespace
     "LogProcessor": cloudflare.Service
+    "Stat": cloudflare.Service
     "ZenData": cloudflare.R2Bucket
     "ZenDataNew": cloudflare.R2Bucket
   }
