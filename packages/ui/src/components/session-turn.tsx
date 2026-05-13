@@ -534,18 +534,20 @@ export function SessionTurn(
                     <Part part={shellModePart()!} message={msg()} defaultOpen />
                   </Match>
                   <Match when={true}>
+                    {/* 附件显示区域 */}
                     <Show when={attachmentParts().length > 0}>
                       <div data-slot="session-turn-attachments" aria-live="off">
                         <Message message={msg()} parts={attachmentParts()} />
                       </div>
                     </Show>
+                    {/* Sticky 区域: 用户消息+ { 图标 + 状态文本 + 时长 }*/}
                     <div data-slot="session-turn-sticky" ref={setStickyRef}>
-                      {/* User Message */}
+                      {/* 用户消息 */}
                       <div data-slot="session-turn-message-content" aria-live="off">
                         <Message message={msg()} parts={stickyParts()} />
                       </div>
 
-                      {/* Trigger (sticky) */}
+                      {/* { 图标 + 状态文本 + 时长 } */}
                       <Show when={working() || hasSteps()}>
                         <div data-slot="session-turn-response-trigger">
                           <Button
@@ -613,7 +615,7 @@ export function SessionTurn(
                         </div>
                       </Show>
                     </div>
-                    {/* Response */}
+                    {/* Response :可展开的响应内容：展开时显示AI的详细执行步骤*/}
                     <Show when={props.stepsExpanded && assistantMessages().length > 0}>
                       <div data-slot="session-turn-collapsible-content-inner" aria-hidden={working()}>
                         <For each={assistantMessages()}>
@@ -633,6 +635,7 @@ export function SessionTurn(
                         </Show>
                       </div>
                     </Show>
+                    {/* Response :权限请求区：步骤折叠时，仍然显示需要用户批准的权限请求*/}
                     <Show when={!props.stepsExpanded && permissionParts().length > 0}>
                       <div data-slot="session-turn-permission-parts">
                         <For each={permissionParts()}>
@@ -640,12 +643,13 @@ export function SessionTurn(
                         </For>
                       </div>
                     </Show>
-                    {/* Response */}
+                    {/* Response ：显示AI的最终回复：*/}
                     <div class="sr-only" aria-live="polite">
                       {!working() && response() ? response() : ""}
                     </div>
                     <Show when={!working() && (response() || hasDiffs())}>
                       <div data-slot="session-turn-summary-section">
+                        {/* 响应文本 */}
                         <div data-slot="session-turn-summary-header">
                           <h2 data-slot="session-turn-summary-title">{i18n.t("ui.sessionTurn.summary.response")}</h2>
                           <div data-slot="session-turn-response">
@@ -677,6 +681,7 @@ export function SessionTurn(
                             </Show>
                           </div>
                         </div>
+                        {/* 文件差异列表 */}
                         <Accordion
                           data-slot="session-turn-accordion"
                           multiple
@@ -732,6 +737,7 @@ export function SessionTurn(
                             )}
                           </For>
                         </Accordion>
+                        {/* 显示更多按钮 */}
                         <Show when={messageDiffs().length > store.diffLimit}>
                           <Button
                             data-slot="session-turn-accordion-more"
