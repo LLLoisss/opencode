@@ -4,14 +4,27 @@
   "description": "",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./vite": "./vite.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/opencode-app.es.js",
+      "require": "./dist/opencode-app.umd.js"
+    },
+    "./vite": "./vite.js",
+    "./src": "./src/index.ts"
   },
+  "main": "./dist/opencode-app.umd.js",
+  "module": "./dist/opencode-app.es.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "vite.js"
+  ],
   "scripts": {
     "typecheck": "tsgo -b",
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
+    "build:lib": "vite build --mode lib",
     "serve": "vite preview",
     "test": "playwright test",
     "test:e2e": "playwright test",
